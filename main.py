@@ -1,36 +1,42 @@
-import mysql.connector as sql
 import streamlit as st
 import pandas as pd
-import dotenv as dt #dotenv é a enviroment variable q é basicamente variavies escondidas de se usar
-import os #biblioteca q faz a porta entre meu programa e o sistema operacional
-dt.load_dotenv()
-try:
-    senha_forte = os.getenv("senhas")
-    conexao = sql.connect(
-    host="localhost",       # Endereço do servidor (ex: localhost ou IP)
-    user="root",     # Nome de usuário do MySQL
-    password="senha_forte",   # Não sei se é o ideal 
-    #deixar senha no codigo... sempre penso q não mas n sei resolver
-    database="planilha_project",# Nome do banco de dados
-    )   
-    cursor = conexao.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS carteiras (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nome_projeto VARCHAR(100) NOT NULL,
-            tipo VARCHAR(50) NOT NULL
-        )
-    """)
-    conexao.commit()
-    print("Tabela verificada/criada com sucesso. Fim do código!")
-except sql.Error as error:
-    print(f"Deu erro man na {error}")
-except sql.Error as erro_geral:
-    print(f"Deu erro man na {erro_geral}")
-finally:
-    if "conexão" in locals() and conexao.is_connected():
-        cursor.close()
-        conexao.close()
-#cursor = conexao.cursor()
+import mysql.connector as sql
+import os
+from dotenv import load_dotenv as ld
 
+ld()
+senha_forte = os.getenv("senhas")
+def conectar_banco():
+    return sql.connect(
+        host="localhost",      
+        user="root",     
+        password=senha_forte, 
+        database="planilha_project",
+    )
 
+#pego um parametro do streamlit o titulo 
+st.title("Controle Financeiro")
+#
+st.divider()
+
+st.subheader("Criar nova planilha")
+
+#form de formulario, basicamente vai criar um formulario basico
+with st.form("form_carteira"):
+    nome_planilha = st.text_input("Nome da planilha ou mes")
+    tipo_planilha = st.selectbox("Categoria",["Pessoal","Empresarial"])
+    salvar_planilha = st.form_submit_button("Salvar dados")
+    if salvar_planilha:
+        try:
+            conexao = conectar_banco()
+            cursor = conexao.cursor()
+            inserir_sql = f"INSERT INTO base (base,tipo) VALUES ('{nome_planilha}','{tipo_planilha}')"
+            cursor.execute(inserir_sql)
+            conexao.commit()
+            st.success(f"Planilha {nome_planilha} criada com sucesso")
+        except Exception as erro:
+            st.error(f"Erro ao salvar:{erro}")
+        finally:
+            if 'conexao' in locals() and conexao.is_connected():
+                cursor.close()
+                conexao.close()
