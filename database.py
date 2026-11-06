@@ -1,19 +1,25 @@
 import mysql.connector as sql
-import dotenv as dt #dotenv é a enviroment variable q é basicamente variavies escondidas de se usar
+from dotenv import load_dotenv  #dotenv é a enviroment variable q é basicamente variavies escondidas de se usar
 import os #biblioteca q faz a porta entre meu programa e o sistema operacional
-dt.load_dotenv()
+#mude o diretorio para o local que vc usa pedro,,,,,
+diretorio_atual =r'C:\Users\Allure_Informatica\Desktop\finaceiro\projeto_planilha\senhas.env'
+load_dotenv(diretorio_atual) 
+db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
+db_host = "localhost"
+db_user = "root"
 try:
     senha_forte = os.getenv("senhas")
     conexao = sql.connect(
-    host="localhost",       # Endereço do servidor (ex: localhost ou IP)
-    user="root",     # Nome de usuário do MySQL
+    host=db_host,       # Endereço do servidor (ex: localhost ou IP)
+    user=db_user,     # Nome de usuário do MySQL
     password=senha_forte, #uso de .env
-    database="planilha_project",# Nome do banco de dados
+    database=db_name,# Nome do banco de dados
     )   
     cursor = conexao.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS base (
+        CREATE TABLE IF NOT EXISTS tabela (
             id INT AUTO_INCREMENT PRIMARY KEY,
+            base VARCHAR(100) NOT NULL,
             tipo VARCHAR(100) NOT NULL
         )
     """)
@@ -24,7 +30,7 @@ try:
         data DATE NOT NULL,
         descricao VARCHAR(255),
         valor DECIMAL(10, 2) NOT NULL,
-        FOREIGN KEY (carteira_id) REFERENCES base(id)
+        FOREIGN KEY (carteira_id) REFERENCES tabela(id)
     )
     """)
     conexao.commit()
