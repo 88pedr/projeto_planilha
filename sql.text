@@ -1,0 +1,7 @@
+SHOW DATABASES;
+#mostras os bancos de dados
+
+mysql -u root -p
+#entra no modo sql
+
+CREATE DATABASES (NOME);

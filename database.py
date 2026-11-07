@@ -2,37 +2,53 @@ import mysql.connector as sql
 from dotenv import load_dotenv  #dotenv é a enviroment variable q é basicamente variavies escondidas de se usar
 import os #biblioteca q faz a porta entre meu programa e o sistema operacional
 #mude o diretorio para o local que vc usa pedro,,,,,
-diretorio_atual =r'C:\Users\Allure_Informatica\Desktop\finaceiro\projeto_planilha\senhas.env'
-load_dotenv(diretorio_atual) 
-db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
-db_host = "localhost"
-db_user = "root"
-try:
+
+#FUNÇÃO_INICIAL DE CONEXÃO DE DADOS
+#----------------------------------------------------------------------------
+def conectar_banco1():
+    diretorio_atual =r"/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha"
+    load_dotenv(diretorio_atual) 
+    db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
+    db_host = "localhost"
+    db_user = "root"
     senha_forte = os.getenv("senhas")
-    conexao = sql.connect(
-    host=db_host,       # Endereço do servidor (ex: localhost ou IP)
-    user=db_user,     # Nome de usuário do MySQL
-    password=senha_forte, #uso de .env
-    database=db_name,# Nome do banco de dados
-    )   
+    return sql.connect(
+        host=db_host,       # Endereço do servidor (ex: localhost ou IP)
+        user=db_user,     # Nome de usuário do MySQL
+        password=senha_forte, #uso de .env
+        database=db_name,   # Nome do banco de dados
+        )
+#----------------------------------------------------------------------------
+
+
+#CRIAR TABELAS
+#----------------------------------------------------------------------------
+try:
+    conexao = conectar_banco1()
     cursor = conexao.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS tabela (
+        CREATE TABLE IF NOT EXISTS fornecedores (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            base VARCHAR(100) NOT NULL,
-            tipo VARCHAR(100) NOT NULL
+            nome VARCHAR(30) NOT NULL,
+            saldo VARCHAR(30) NOT NULL
         )
     """)
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS movimentacoes (
+    CREATE TABLE IF NOT EXISTS clientes (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        carteira_id INT NOT NULL,
+        nome VARCHAR(30) NOT NULL,
         data DATE NOT NULL,
-        descricao VARCHAR(255),
-        valor DECIMAL(10, 2) NOT NULL,
-        FOREIGN KEY (carteira_id) REFERENCES tabela(id)
+        pago BOOLEAN
     )
     """)
+    cursor.EXECUTE("""
+    CREATE TABLE IF NOT EXISTS debitos(
+    conta VARCHAR(30) NOT NULL,
+    saldo_devedor INT NOT NULL,
+    pago BOOLEAN
+    )
+    """)
+#----------------------------------------------------------------------------
     conexao.commit()
     print("Tabela verificada/criada com sucesso. Fim do código!")
 except sql.Error as error:
