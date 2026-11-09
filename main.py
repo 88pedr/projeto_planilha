@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
 db_host = "localhost"
 db_user = "root"
-diretorio_atual =r"/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha"
+diretorio_atual =r"/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha/senhas.env"
 #ele pega o dir que mandei ler os enviroment e joga na memoria rapida do sistema
 load_dotenv(diretorio_atual)
 #ele vai ler essa memoria rapido do sistema e tentar pegar a enviroment lançada mais recente

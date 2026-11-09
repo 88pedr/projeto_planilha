@@ -4,20 +4,20 @@ import os #biblioteca q faz a porta entre meu programa e o sistema operacional
 #mude o diretorio para o local que vc usa pedro,,,,,
 
 #FUNÇÃO_INICIAL DE CONEXÃO DE DADOS
+diretorio_atual ="/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha/senhas.env"
+load_dotenv(diretorio_atual) 
+db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
+db_host = "localhost"
+db_user = "root"
+senha_forte = os.getenv("senhas")
 #----------------------------------------------------------------------------
 def conectar_banco1():
-    diretorio_atual =r"/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha"
-    load_dotenv(diretorio_atual) 
-    db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
-    db_host = "localhost"
-    db_user = "root"
-    senha_forte = os.getenv("senhas")
     return sql.connect(
         host=db_host,       # Endereço do servidor (ex: localhost ou IP)
         user=db_user,     # Nome de usuário do MySQL
         password=senha_forte, #uso de .env
         database=db_name,   # Nome do banco de dados
-        )
+    )
 #----------------------------------------------------------------------------
 
 
@@ -30,21 +30,26 @@ try:
         CREATE TABLE IF NOT EXISTS fornecedores (
             id INT AUTO_INCREMENT PRIMARY KEY,
             nome VARCHAR(30) NOT NULL,
-            saldo VARCHAR(30) NOT NULL
+            saldo FLOAT NOT NULL,
+            data DATE NOT NULL,
+            pago BOOLEAN
         )
     """)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS clientes (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nome VARCHAR(30) NOT NULL,
+        saldo FLOAT,
         data DATE NOT NULL,
         pago BOOLEAN
     )
     """)
-    cursor.EXECUTE("""
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS debitos(
-    conta VARCHAR(30) NOT NULL,
-    saldo_devedor INT NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(30) NOT NULL,
+    saldo FLOAT NOT NULL,
+    data DATE NOT NULL,
     pago BOOLEAN
     )
     """)
