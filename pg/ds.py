@@ -8,7 +8,7 @@ import sys
 from sqlalchemy import create_engine, text
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #ele pega a pasta que quero para inserir no codigo e com insert mando ele preocurar nesta pasta primeiro antes de tudo
-sys.path.insert(0,"/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha")
+sys.path.insert(0,r"C:\Users\Allure_Informatica\Desktop\finaceiro\projeto_planilha")
 import database as dt
 tabela1 = "fornecedores"#altere de acordo com o nome do banco de dados
 tabela2 = "clientes"
@@ -17,7 +17,7 @@ url_conexao = f"mysql+mysqlconnector://{dt.db_user}:{dt.senha_forte}@{dt.db_host
 engine = create_engine(url_conexao)
 conexao = dt.conectar_banco1()
 cursor = conexao.cursor()
-usuario = "Allure"
+usuario = "ALLURE"
 st.title(f"BEM VINDO {usuario}")
 st.divider()
 #-------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ def gerenciador_db(planilha_tela,tab,nome,saldo,pago,data,id,mes_ref):
 #CONSEGUIR PÁSSAR AS DIVIDAS PARA O MES QUE VÉM
 def rolar_dividas(mes_atual, mes_seguinte):
     # colocando dois botões, podemos prevenir o clique acidental com um st.warning
-    if st.sidebar.button(f"Rolagem de {mes_atual} ➡️ {mes_seguinte}"):
+    if st.sidebar.button(f"Rolagem de {mes_atual} para  {mes_seguinte}"):
         with engine.begin() as conn:
             # lista para varrer preocurando
             tabelas = ["fornecedores", "clientes", "debitos"]
@@ -147,7 +147,7 @@ def painel_dashboard(mes_atual):
     col2.metric("Despesas (Saídas)", f"R$ {total_despesas:,.2f}")
     
     cor_lucro = "normal" if lucro >= 0 else "inverse"
-    col3.metric("Lucro Líquido", f"R$ {lucro:,.2f}", delta=f"R$ {lucro:,.2f}", delta_color=cor_lucro)
+    col3.metric("Lucro Líquido", f"R$ {lucro:,.2f}")
     st.divider()
 #-------------------------------------------------------------------------------------------------------------
 

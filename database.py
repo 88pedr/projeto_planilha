@@ -4,7 +4,7 @@ import os #biblioteca q faz a porta entre meu programa e o sistema operacional
 #mude o diretorio para o local que vc usa pedro,,,,,
 
 #FUNÇÃO_INICIAL DE CONEXÃO DE DADOS
-diretorio_atual ="/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha/senhas.env"
+diretorio_atual =r"C:\Users\Allure_Informatica\Desktop\finaceiro\projeto_planilha\senhas.env"
 load_dotenv(diretorio_atual) 
 db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
 db_host = "localhost"

@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
 db_host = "localhost"
 db_user = "root"
-diretorio_atual =r"/home/pedro_peixoto/Área de trabalho/projetos/projeto_planilha/senhas.env"
+diretorio_atual =r"C:\Users\Allure_Informatica\Desktop\finaceiro\projeto_planilha\senhas.env"
 #ele pega o dir que mandei ler os enviroment e joga na memoria rapida do sistema
 load_dotenv(diretorio_atual)
 #ele vai ler essa memoria rapido do sistema e tentar pegar a enviroment lançada mais recente
@@ -55,7 +55,7 @@ else:
     #------------------------------------------------------------------------------
     #BOTÃO DE ENTRAR
     if st.button("Entrar"):
-        if (email=="test@gmail.com") and (senha=="admin"):
+        if (email=="allure") and (senha=="admin"):
             st.success("Usuario conseguio passar para proxima pagina")
             st.session_state["logado"]=True
             st.rerun()
