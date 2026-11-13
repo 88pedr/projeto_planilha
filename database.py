@@ -1,22 +1,24 @@
 import mysql.connector as sql
-from dotenv import load_dotenv  #dotenv é a enviroment variable q é basicamente variavies escondidas de se usar
-import os #biblioteca q faz a porta entre meu programa e o sistema operacional
-#mude o diretorio para o local que vc usa pedro,,,,,
+from dotenv import load_dotenv  # Carrega variáveis de ambiente de um arquivo .env (se existir)
+import os  # Acesso às variáveis de ambiente do sistema
 
-#FUNÇÃO_INICIAL DE CONEXÃO DE DADOS
-diretorio_atual =r"C:\Users\Allure_Informatica\Desktop\finaceiro\projeto_planilha\senhas.env"
-load_dotenv(diretorio_atual) 
-db_name = "projeto_planilha" #coloque o nome local do DB aqui pedro...
-db_host = "localhost"
-db_user = "root"
-senha_forte = os.getenv("senhas")
-#----------------------------------------------------------------------------
+# Carrega .env do diretório atual/projeto quando disponível
+load_dotenv()
+
+# Configurações do banco via variáveis de ambiente (com padrões para desenvolvimento local)
+db_name = os.getenv("DATABASE", "projeto_planilha")
+db_host = os.getenv("HOST", "localhost")
+db_user = os.getenv("DB_USER", os.getenv("USER", "root"))
+senha_forte = os.getenv("SENHAS") or os.getenv("senhas")
+
+
+# ----------------------------------------------------------------------------
 def conectar_banco1():
     return sql.connect(
-        host=db_host,       # Endereço do servidor (ex: localhost ou IP)
-        user=db_user,     # Nome de usuário do MySQL
-        password=senha_forte, #uso de .env
-        database=db_name,   # Nome do banco de dados
+        host=db_host,
+        user=db_user,
+        password=senha_forte,
+        database=db_name,
     )
 #----------------------------------------------------------------------------
 

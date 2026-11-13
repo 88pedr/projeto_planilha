@@ -1,7 +1,8 @@
-FROM Python:3
+FROM python:3
 WORKDIR /app
-COPY requirements.text
-RUN pip install --no-cache-dir -r requirements.text
-COPY ..
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 EXPOSE 8501
-CMD ["streamlit", "run", "main.py"]
+#sem o serve.port e serve.adress nao abre no navegador...
+CMD ["python", "-m", "streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]

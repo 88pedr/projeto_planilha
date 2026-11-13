@@ -1,0 +1,5 @@
+.env
+sql.text
+.venv/
+database_pedro/
+__pycache__/
