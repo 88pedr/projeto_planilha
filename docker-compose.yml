@@ -9,13 +9,12 @@ services:
       # Persiste os dados do MySQL no diretório local do projeto.
       - ./database_pedro:/var/lib/mysql
     environment:
-      MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${SENHAS}
       MYSQL_ROOT_PASSWORD: ${SENHAS}
       MYSQL_DATABASE: ${DATABASE}
     env_file:
       - .env
-
+      
   streamlit:
     build: .
     container_name: Planilha_Financeira
