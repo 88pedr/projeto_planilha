@@ -3,3 +3,4 @@ python-dotenv
 pandas
 mysql-connector-python
 SQLAlchemy
+email-validator

@@ -60,6 +60,22 @@ def criar_tabela():
         pago BOOLEAN
         )
         """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS user(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255),
+        pawssword VARCHAR(255),
+        is_activate BOOLEAN,
+        data DATE NOT NULL
+        )
+        """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS user_data(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nome VARCHAR(30),
+        phone INT,
+        foto_url VARCHAR(255)
+        )""")
         conexao.commit()
         print("Tabela verificada/criada com sucesso. Fim do código!")
     except sql.Error as error:
