@@ -6,11 +6,5 @@ planilha para gestão financeira com python e power BI
 -u root = defino que vou tentar abrir o mysql com o suario root q é o maior de autoridade dentro de um banco de dados
 -p=password aparece no terminal para insirir a senha;
 
-para configurar o .env
-SENHAS=
-DB_USER=
-HOST=
-DATABASE=
-PORTA1=
-PORTA2=
+
 

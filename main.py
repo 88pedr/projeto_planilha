@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import mysql.connector as sql
 import os
+import database as dt
+import sqlalchemy as chemy
 from dotenv import load_dotenv
 #APENAS COISAS DEFINIDAS NO COMEÇO (VARIAVEIS/VALORES)
 #-----------------------------------------------------------------------------
@@ -15,7 +17,8 @@ load_dotenv(diretorio_atual)
 senha_forte = os.getenv("senhas")
 
 #------------------------------------------------------------------------------
-
+url_conexao = f"mysql+mysqlconnector://{dt.db_user}:{dt.senha_forte}@{dt.db_host}:{3306}/{dt.db_name}"
+engine = chemy.create_engine(url_conexao)
 
 #FUNÇÕES PARA SER CHAMADA POSTERIOMENTES
 #------------------------------------------------------------------------------
@@ -36,7 +39,7 @@ if (st.session_state["logado"]==True):
     pg=st.navigation([
         st.Page("pg/ds.py", title="Preferences", url_path="test")],
         position="hidden")#esconde a barra lateral de navegação
-    pg.run()
+    pg.run()    
 else:
     #FRONTENT DA PAGINA
     #------------------------------------------------------------------------------
@@ -61,4 +64,12 @@ else:
             st.rerun()
         else:
             st.write("Senha ou Usuario incorretos")
+    @st.dialog("Criar conta")#@ é um decorador que envolve a função abaixo e modifica ela
+    def criar_pop_up():
+        criar_email = st.text_input
+        criar_senha = st.text_input
+        query =# parei aqui por causa da trovoada muito forte vou para o note.
+    if st.button("Criar Conta"):
+        st.popover("zasp")
+
     #------------------------------------------------------------------------------
