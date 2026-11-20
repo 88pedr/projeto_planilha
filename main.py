@@ -13,7 +13,6 @@ engine = chemy.create_engine(url_conexao)
 
 #FUNÇÕES PARA SER CHAMADA POSTERIOMENTES
 #------------------------------------------------------------------------------
-dt.conectar_banco1()
 #------------------------------------------------------------------------------
 #sistema de navegação de paginas
 #------------------------------------------------------------------------------
@@ -51,27 +50,29 @@ else:
             st.write("Senha ou Usuario incorretos")
     @st.dialog("Criar conta")#@ é um decorador que envolve a função abaixo e modifica ela
     def criar_pop_up():
-        criar_email = st.text_input
-        criar_senha = st.text_input
-    if st.button("Criar conta"):
-        criar_pop_up()
-        try:
-            with engine.begin() as conn:
-                email_info = ev.validate_email(criar_email,check_deliverability=False)
-                criar_email=email_info.normalized
-                query_email =f"""
-                INSERT INTO :table (:column)
-                VALUES (:values)
-                """
-                conn.execute(chemy.text(query_email),{
-                    ":table": "user",
-                    ":column":"email",
-                    ":values":criar_email
-                    })
-                st.success("DEU BOM")
-        except ev.EmailNotValidError as e:
-            st.write("DEU ERRO CHEFE")
+        criar_email = st.text_input("EMAIL")
+        criar_senha = st.text_input("SENHA")
 
+        if st.button("Confirma"):
+            try:
+                with engine.begin() as conn:
+                    email_info = ev.validate_email(criar_email,check_deliverability=False)
+                    criar_email=email_info.normalized
+                    query_email =f"""
+                    INSERT INTO :table (:column)
+                    VALUES (:values)
+                    """
+                    conn.execute(chemy.text(query_email),{
+                        ":table": "user",
+                        ":column":"email",
+                        ":values":criar_email
+                        })
+                    st.success("DEU BOM")
+                    st.rerun()
+            except ev.EmailNotValidError as e:
+                st.write("DEU ERRO CHEFE")
+    if st.button("Cria conta"):
+        criar_pop_up()
     #------------------------------------------------------------------------------
     #def chamar_sql(test1,test2):
     #            query =f"""SELECT :email FROM :user WHERE is_active"""

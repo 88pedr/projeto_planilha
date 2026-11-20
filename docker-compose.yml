@@ -9,7 +9,6 @@ services:
       # Persiste os dados do MySQL no diretório local do projeto.
       - ./database_pedro:/var/lib/mysql
     environment:
-      MYSQL_PASSWORD: ${SENHAS}
       MYSQL_ROOT_PASSWORD: ${SENHAS}
       MYSQL_DATABASE: ${DATABASE}
     env_file:

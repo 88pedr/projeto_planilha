@@ -1,10 +1,22 @@
 import mysql.connector as sql
 from dotenv import load_dotenv  # Carrega variáveis de ambiente de um arquivo .env (se existir)
 import os  # Acesso às variáveis de ambiente do sistema
+from pathlib import Path
 
 # Carrega .env do diretório atual/projeto quando disponível
-load_dotenv()
+env_path = Path(__file__).resolve().parent / ".env"
 
+load_dotenv(dotenv_path=env_path, override=True)
+
+# Se existir /.dockerenv, está dentro do container; caso contrário, está rodando localmente no PC
+if os.path.exists("/.dockerenv"):
+    db_host = os.getenv("HOST", "mysql")
+else:
+    db_host = "localhost"
+
+db_name = os.getenv("DATABASE", "projeto_planilha")
+db_user = os.getenv("DB_USER", "root")
+senha_forte = os.getenv("SENHAS") or os.getenv("senhas")
 # Configurações do banco via variáveis de ambiente (com padrões para desenvolvimento local)
 db_name = os.getenv("DATABASE", "projeto_planilha")
 db_host = os.getenv("HOST", "localhost")
@@ -13,6 +25,13 @@ senha_forte = os.getenv("SENHAS") or os.getenv("senhas")
 
 
 # ----------------------------------------------------------------------------
+def conectar_servidor():
+    """Conecta ao servidor MySQL sem selecionar um banco específico."""
+    return sql.connect(
+        host=db_host,
+        user=db_user,
+        password=senha_forte
+    )
 def conectar_banco1():
     return sql.connect(
         host=db_host,       # Endereço do servidor (ex: localhost ou IP)
@@ -22,12 +41,26 @@ def conectar_banco1():
     )
 #----------------------------------------------------------------------------
 
-
+def criar_database():
+    conexao = None
+    cursor = None
+    try:
+        conexao = conectar_servidor()
+        cursor = conexao.cursor()
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
+        conexao.commit()
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao and conexao.is_connected():
+            conexao.close()
 #CRIAR TABELAS
 #----------------------------------------------------------------------------
 def criar_tabela():
     conexao=None
+    
     try:
+        criar_database()
         conexao = conectar_banco1()
         cursor = conexao.cursor()
         cursor.execute("""
@@ -73,7 +106,7 @@ def criar_tabela():
         CREATE TABLE IF NOT EXISTS user_data(
         id INT AUTO_INCREMENT PRIMARY KEY,
         nome VARCHAR(30),
-        phone INT,
+        phone VARCHAR(20),
         foto_url VARCHAR(255)
         )""")
         conexao.commit()
@@ -83,9 +116,10 @@ def criar_tabela():
     except Exception as erro_geral:
         print(f"Deu erro geral na {erro_geral}")
     finally:
-        if "conexao" in locals() and conexao.is_connected():
+        if conexao in locals() and conexao.is_connected():
             cursor.close()
             conexao.close()
     #cursor = conexao.cursor()
 #----------------------------------------------------------------------------
-
+if __name__ == "__main__":
+    criar_tabela()
