@@ -42,7 +42,12 @@ else:
     #------------------------------------------------------------------------------
     #BOTÃO DE ENTRAR
     if st.button("Entrar"):
-        if (email=="allure") and (senha=="admin"):
+        
+        def lista_email_senha(emailorsenha):
+            query_email=f"SELECT {emailorsenha} FROM user"
+            list_email=pd.read_sql(chemy.text(query_email),con=engine)
+            return list_email
+        if (email in lista_email_senha("email")) and (senha in lista_email_senha("password")):
             st.success("Usuario conseguio passar para proxima pagina")
             st.session_state["logado"]=True
             st.rerun()
@@ -58,21 +63,27 @@ else:
                 with engine.begin() as conn:
                     email_info = ev.validate_email(criar_email,check_deliverability=False)
                     criar_email=email_info.normalized
+                    #a crase é pq user é uma palavra reservada
                     query_email =f"""
-                    INSERT INTO :table (:column)
+                    INSERT INTO `user` (email)
                     VALUES (:values)
                     """
+                    query_senha=f"""INSERT INTO `user` (pawssword)
+                    VALUES (:pass)"""
                     conn.execute(chemy.text(query_email),{
-                        ":table": "user",
-                        ":column":"email",
-                        ":values":criar_email
+                        #o dois : usa como marcado n se deve usar o : como parte
+                        "values":criar_email
                         })
+                    conn.execute(chemy.text(query_senha),{
+                        "pass":criar_senha
+                    })
                     st.success("DEU BOM")
-                    st.rerun()
+                st.rerun()
             except ev.EmailNotValidError as e:
                 st.write("DEU ERRO CHEFE")
     if st.button("Cria conta"):
         criar_pop_up()
+
     #------------------------------------------------------------------------------
     #def chamar_sql(test1,test2):
     #            query =f"""SELECT :email FROM :user WHERE is_active"""

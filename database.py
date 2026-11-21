@@ -3,7 +3,7 @@ from dotenv import load_dotenv  # Carrega variáveis de ambiente de um arquivo .
 import os  # Acesso às variáveis de ambiente do sistema
 from pathlib import Path
 
-# Carrega .env do diretório atual/projeto quando disponível
+# carrega .env do diretório atual melhor do que hardcoded que nem antes
 env_path = Path(__file__).resolve().parent / ".env"
 
 load_dotenv(dotenv_path=env_path, override=True)
@@ -14,10 +14,7 @@ if os.path.exists("/.dockerenv"):
 else:
     db_host = "localhost"
 
-db_name = os.getenv("DATABASE", "projeto_planilha")
-db_user = os.getenv("DB_USER", "root")
-senha_forte = os.getenv("SENHAS") or os.getenv("senhas")
-# Configurações do banco via variáveis de ambiente (com padrões para desenvolvimento local)
+
 db_name = os.getenv("DATABASE", "projeto_planilha")
 db_host = os.getenv("HOST", "localhost")
 db_user = os.getenv("DB_USER", os.getenv("USER", "root"))
@@ -34,10 +31,10 @@ def conectar_servidor():
     )
 def conectar_banco1():
     return sql.connect(
-        host=db_host,       # Endereço do servidor (ex: localhost ou IP)
-        user=db_user,     # Nome de usuário do MySQL
+        host=db_host,       # endereço do servidor (ex: localhost ou IP)
+        user=db_user,     # nome de usuário do MySQL
         password=senha_forte, #uso de .env
-        database=db_name   # Nome do banco de dados
+        database=db_name   # nome do banco de dados
     )
 #----------------------------------------------------------------------------
 
@@ -99,7 +96,7 @@ def criar_tabela():
         email VARCHAR(255),
         pawssword VARCHAR(255),
         is_activate BOOLEAN,
-        data DATE NOT NULL
+        data DATE DEFAULT (CURRET_DATE)
         )
         """)
         cursor.execute("""
@@ -109,6 +106,8 @@ def criar_tabela():
         phone VARCHAR(20),
         foto_url VARCHAR(255)
         )""")
+        cursor.execute("""
+        ALTER""")
         conexao.commit()
         print("Tabela verificada/criada com sucesso. Fim do código!")
     except sql.Error as error:
