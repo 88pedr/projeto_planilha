@@ -45,9 +45,11 @@ else:
         
         def lista_email_senha(emailorsenha):
             query_email=f"SELECT {emailorsenha} FROM user"
-            list_email=pd.read_sql(chemy.text(query_email),con=engine)
+            emails=pd.read_sql(chemy.text(query_email),con=engine)
+            list_email=emails[f"{emailorsenha}"].dropna().tolist()
+            
             return list_email
-        if (email in lista_email_senha("email")) and (senha in lista_email_senha("password")):
+        if (email in lista_email_senha("email")) and (senha in lista_email_senha("pawssword")):
             st.success("Usuario conseguio passar para proxima pagina")
             st.session_state["logado"]=True
             st.rerun()
